@@ -7,11 +7,6 @@ pipeline {
      IMAGE_REPO_NAME="java-app"
      REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
 	   DOCKERHUB_CREDENTIALS=credentials('docker')
-     NEXUS_VERSION = "nexus3"
-     NEXUS_PROTOCOL = "http"
-     NEXUS_URL = "18.212.175.27:8081"
-     NEXUS_REPOSITORY = "java-nexus"
-     NEXUS_CREDENTIAL_ID = "nexus"
  } 
     agent any
 	
@@ -53,39 +48,30 @@ pipeline {
 
        stage("Publish to Nexus Repository Manager") {
             steps {
-                script {
-                    pom = readMavenPom file: "pom.xml";
-                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-                    artifactPath = filesByGlob[0].path;
-                    artifactExists = fileExists artifactPath;
-                    if(artifactExists) {
-                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
-                        nexusArtifactUploader(
-                            nexusVersion: NEXUS_VERSION,
-                            protocol: NEXUS_PROTOCOL,
-                            nexusUrl: NEXUS_URL,
-                            groupId: pom.groupId,
-                            version: pom.version,
-                            repository: NEXUS_REPOSITORY,
-                            credentialsId: NEXUS_CREDENTIAL_ID,
-                            artifacts: [
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: artifactPath,
-                                type: pom.packaging],
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: "pom.xml",
-                                type: "pom"]
-                            ]
-                        );
-                    } else {
-                        error "*** File: ${artifactPath}, could not be found";
-                    }
-                }
+                 script
+            {
+                 def readPom = readMavenPom file: 'pom.xml'
+                 def nexusrepo = readPom.version.endsWith("SNAPSHOT") ? "maven-snapshots" : "maven-releases"
+                 nexusArtifactUploader artifacts: 
+                 [
+                     [
+                         artifactId: "${readPom.artifactId}",
+                         classifier: '', 
+                         file: "target/${readPom.artifactId}-${readPom.version}.war", 
+                         type: 'war'
+                     ]
+                ], 
+                         credentialsId: 'nexus', 
+                         groupId: "${readPom.groupId}", 
+                         nexusUrl: '18.212.175.27:8081', 
+                         nexusVersion: 'nexus3', 
+                         protocol: 'http', 
+                         repository: "${nexusrepo}", 
+                         version: "${readPom.version}"
+
             }
-        }
+         }
+     }
         //  stage('Docker Build and Tag') {
         //       steps {
         //           sh 'docker build -t sample_login_app:latest .'
