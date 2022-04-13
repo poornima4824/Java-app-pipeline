@@ -62,7 +62,7 @@ pipeline {
              nexusVersion: 'nexus3', 
              protocol: 'http', 
              repository: 'java-nexus', 
-             version: '1.0.0'
+             version: '1'
          }
        }
         //  stage('Docker Build and Tag') {

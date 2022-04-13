@@ -4,7 +4,7 @@
   <groupId>com.devops4solutions</groupId>
   <artifactId>LoginApp</artifactId>
   <packaging>war</packaging>
-  <version>0.0.1</version>
+  <version>1</version>
   <name>LoginApp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
