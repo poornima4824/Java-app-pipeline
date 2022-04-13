@@ -19,14 +19,6 @@
             <version>5.1.30</version>
         </dependency>
   </dependencies>
-  <repositories>
-		<repository>
-		     <id>nexus</id>
-		     <name>proxy-repo-mss</name>
-	              <url>http://18.212.175.27:8081/repository/maven-central/</url>
-		</repository>
-		
-	</repositories>
   <build>
   <pluginManagement>
    <plugins>
@@ -69,7 +61,6 @@
             </plugin>
         </plugins>
     </build>
-   <!----> 
    <repositories>
         <repository>
             <snapshots>
@@ -80,6 +71,5 @@
             <url>https://jcenter.bintray.com</url>
         </repository>
     </repositories>
-    -->
 
 </project>
