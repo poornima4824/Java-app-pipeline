@@ -48,23 +48,31 @@ pipeline {
 
        stage('Nexus artifact upload') {
          steps {
-         nexusArtifactUploader artifacts: [
-           [
-             artifactId: 'LoginApp', 
-             classifier: '', 
-             file: 'target/LoginApp-0.0.1.war', 
-             type: 'war'
-             ]
-          ], 
-             credentialsId: 'nexus', 
-             groupId: 'com.devops4solutions', 
-             nexusUrl: '18.212.175.27/:8081', 
-             nexusVersion: 'nexus3', 
-             protocol: 'http', 
-             repository: 'java-nexus', 
-             version: '1'
+         script
+            {
+                 def readPom = readMavenPom file: 'pom.xml'
+                 def nexusrepo = readPom.version.endsWith("SNAPSHOT") ? "maven-snapshots" : "maven-releases"
+                 nexusArtifactUploader artifacts: 
+                 [
+                     [
+                         artifactId: "${readPom.artifactId}",
+                         classifier: '', 
+                         file: "target/${readPom.artifactId}-${readPom.version}.war", 
+                         type: 'war'
+                     ]
+                ], 
+                         credentialsId: 'nexus', 
+                         groupId: "${readPom.groupId}", 
+                         nexusUrl: '18.212.175.27:8081', 
+                         nexusVersion: 'nexus3', 
+                         protocol: 'http', 
+                         repository: "${nexusrepo}", 
+                         version: "${readPom.version}"
+
+            }
          }
-       }
+    }
+       
         //  stage('Docker Build and Tag') {
         //       steps {
         //           sh 'docker build -t sample_login_app:latest .'

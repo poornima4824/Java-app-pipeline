@@ -4,7 +4,7 @@
   <groupId>com.devops4solutions</groupId>
   <artifactId>LoginApp</artifactId>
   <packaging>war</packaging>
-  <version>1</version>
+  <version>0.0.1-SNAPSHOT</version>
   <name>LoginApp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -19,6 +19,14 @@
             <version>5.1.30</version>
         </dependency>
   </dependencies>
+  <repositories>
+		<repository>
+		     <id>nexus</id>
+		     <name>proxy-repo-mss</name>
+	              <url>http://18.212.175.27:8081/repository/maven-central/</url>
+		</repository>
+		
+	</repositories>
   <build>
   <pluginManagement>
    <plugins>
@@ -61,7 +69,8 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
+   <!----> 
+   <repositories>
         <repository>
             <snapshots>
                 <enabled>false</enabled>
@@ -71,5 +80,6 @@
             <url>https://jcenter.bintray.com</url>
         </repository>
     </repositories>
+    -->
 
 </project>
