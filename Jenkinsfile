@@ -46,25 +46,25 @@ pipeline {
       // }
       //  }
 
-      //  stage('Nexus artifact upload') {
-      //    steps {
-      //    nexusArtifactUploader artifacts: [
-      //      [
-      //        artifactId: 'LoginWebApp', 
-      //        classifier: '', 
-      //        file: 'target/LoginWebApp-0.0.1-SNAPSHOT.war	', 
-      //        type: 'war'
-      //        ]
-      //     ], 
-      //        credentialsId: 'nexus', 
-      //        groupId: 'com.devops4solutions', 
-      //        nexusUrl: '44.203.198.172:8081', 
-      //        nexusVersion: 'nexus3', 
-      //        protocol: 'http', 
-      //        repository: 'CI-CD-app', 
-      //        version: '1.0.0'
-      //    }
-      //  }
+       stage('Nexus artifact upload') {
+         steps {
+         nexusArtifactUploader artifacts: [
+           [
+             artifactId: 'LoginApp', 
+             classifier: '', 
+             file: 'target/LoginApp-0.0.1	', 
+             type: 'war'
+             ]
+          ], 
+             credentialsId: 'nexus', 
+             groupId: 'com.devops4solutions', 
+             nexusUrl: '18.212.175.27:8081', 
+             nexusVersion: 'nexus3', 
+             protocol: 'http', 
+             repository: 'java-nexus', 
+             version: '1.0.0'
+         }
+       }
         //  stage('Docker Build and Tag') {
         //       steps {
         //           sh 'docker build -t sample_login_app:latest .'
@@ -83,42 +83,41 @@ pipeline {
         //          }
         //    }
      
-    //    stage('Login to AWS ECR')
-    //   {
-    //       steps
-    //       {
-    //           script
-    //           {
-    //              sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
-    //              //sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-    //               sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
-    //           }
-    //       }
-    //   }
-    //    stage('Building Docker Image')
-    //    {
-    //        steps
-    //        {
-    //            script
-    //            {
-    //              sh "docker build -t sample-login-app ."
-    //             //sh "docker build . -t ${REPOSITORY_URI}:LoginWebApp"
-    //            }
-    //        }
-    //    }
-    //    stage('Pushing Docker image into ECR')
-    //    {
-    //        steps
-    //        {
-    //          script
-    //           {
-    //             sh "docker tag sample-login-app:latest 440883647063.dkr.ecr.us-east-1.amazonaws.com/sample-login-app:latest"
-    //             sh "docker push 440883647063.dkr.ecr.us-east-1.amazonaws.com/sample-login-app:latest"
-    //             //  sh "docker push ${REPOSITORY_URI}:sample-login-app"
-    //           }
-    //        }
+            stage('Login to AWS ECR') {
+               steps
+                 {
+                  script
+                  {  
+                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
+                     //sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
+                   }   
+                 }
+            }
+       stage('Building Docker Image')
+       {
+           steps
+           {
+               script
+               {
+                 sh "docker build -t java-app ."
+                //sh "docker build . -t ${REPOSITORY_URI}:LoginApp"
+               }
+           }
+       }
+       stage('Pushing Docker image into ECR')
+       {
+           steps
+           {
+             script
+              {
+                sh "docker tag java-app:latest 440883647063.dkr.ecr.us-east-1.amazonaws.com/java-app:latest"
+                sh "docker push 440883647063.dkr.ecr.us-east-1.amazonaws.com/java-app:latest"
+                //  sh "docker push ${REPOSITORY_URI}:sample-login-app"
+              }
+           }
 
-    //  }
+     }
     //  //stop the previous containers if we use the same container name
     //  stage('stop previous containers') {
     //      steps {
