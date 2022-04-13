@@ -52,13 +52,13 @@ pipeline {
            [
              artifactId: 'LoginApp', 
              classifier: '', 
-             file: 'target/LoginApp-0.0.1	', 
+             file: 'target/LoginApp-0.0.1.war', 
              type: 'war'
              ]
           ], 
              credentialsId: 'nexus', 
              groupId: 'com.devops4solutions', 
-             nexusUrl: '18.212.175.27:8081', 
+             nexusUrl: '18.212.175.27/:8081', 
              nexusVersion: 'nexus3', 
              protocol: 'http', 
              repository: 'java-nexus', 
