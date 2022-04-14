@@ -4,7 +4,8 @@ pipeline {
      AWS_CREDENTIALS= credentials('aws-credentials')
      AWS_ACCOUNT_ID="440883647063"             
      AWS_DEFAULT_REGION="us-east-1" 
-     IMAGE_REPO_NAME="java-app"
+     IMAGE_REPO_NAME="sample-login-app"
+     IMAGE_TAG="v1.0"
      REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
 	   DOCKERHUB_CREDENTIALS=credentials('docker')
  } 
@@ -107,7 +108,7 @@ pipeline {
            {
                script
                {
-                 sh "docker build -t java-app ."
+                 sh "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG}"
                 //sh "docker build . -t ${REPOSITORY_URI}:LoginApp"
                }
            }
@@ -118,9 +119,9 @@ pipeline {
            {
              script
               {
-                sh "docker tag java-app:latest 440883647063.dkr.ecr.us-east-1.amazonaws.com/java-app:latest"
-                sh "docker push 440883647063.dkr.ecr.us-east-1.amazonaws.com/java-app:latest"
-                //  sh "docker push ${REPOSITORY_URI}:sample-login-app"
+                sh "docker tag ${IMAGE_TAG}:${IMAGE_TAG} ${REPOSITORY_URI}:${IMAGE_TAG}"
+               // sh "docker push 440883647063.dkr.ecr.us-east-1.amazonaws.com/java-app:latest"
+                 sh "docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
               }
            }
 
