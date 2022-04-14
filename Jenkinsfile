@@ -97,7 +97,7 @@ pipeline {
                   {  
                      sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
                      //sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
+                    // sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 440883647063.dkr.ecr.us-east-1.amazonaws.com"
                    }   
                  }
             }
@@ -125,19 +125,19 @@ pipeline {
            }
 
      }
-    //  //stop the previous containers if we use the same container name
-    //  stage('stop previous containers') {
-    //      steps {
-    //         sh 'docker ps -f name=myContainerLoginApp -q | xargs --no-run-if-empty docker container stop'
-    //         sh 'docker container ls -a -fname=myContainerLoginApp -q | xargs -r docker container rm'
-    //      }
-    //    }
-    //  stage('Run the Docker Image') {
-    //  steps{
-    //      script {
-    //             sh "docker run -d -p 9090:8080 --rm --name myContainerLoginApp ${REPOSITORY_URI}:latest"
-    //         }
-    //   }
-    // } 
+     //stop the previous containers if we use the same container name
+     stage('stop previous containers') {
+         steps {
+            sh 'docker ps -f name=mvnApp -q | xargs --no-run-if-empty docker container stop'
+            sh 'docker container ls -a -fname=mvnApp -q | xargs -r docker container rm'
+         }
+       }
+     stage('Run the Docker Image') {
+     steps{
+         script {
+                sh "docker run -d -p 9090:8080 --rm --name mvnApp ${REPOSITORY_URI}:latest"
+            }
+      }
+    } 
   }
 }
